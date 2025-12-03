@@ -1,4 +1,4 @@
-import e from 'Express';
+import e from 'express';
 import colorLog, { errorLog } from './utils/logger.js';
 import authRouter from './route/authRoutes.js';
 
