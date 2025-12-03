@@ -7,7 +7,7 @@ services:
     environment:
       PORT: 3003
       DB_NAME: cookbook
-      DB_HOST: techtrove.ddns.net
+      DB_HOST: mariadb
       PASSWORD: h34ea89h4n68
       USER: root
       NODE_ENV: dev
