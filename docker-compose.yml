@@ -1,0 +1,45 @@
+services:
+
+  cookbook-backend:
+    build: ./backend
+    container_name: cookbook-backend
+    restart: always
+    environment:
+      PORT: 3003
+      DB_NAME: cookbook
+      DB_HOST: techtrove.ddns.net
+      PASSWORD: h34ea89h4n68
+      USER: root
+      NODE_ENV: dev
+      FRONTEND_URL: "*"
+    networks:
+      - shared-proxy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/healthcheck"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+
+    labels:
+      - "traefik.enable=true"
+
+      # Router
+      - "traefik.http.routers.chat-backend.rule=Host(`api.cookbook.techtrove.ddns.net`)"
+      - "traefik.http.routers.chat-backend.entrypoints=websecure"
+      - "traefik.http.routers.chat-backend.tls.certresolver=letsencrypt"
+
+      # Service port (this is CRITICAL)
+      - "traefik.http.services.chat-backend.loadbalancer.server.port=3003"
+
+      # Optional: automatic HTTP->HTTPS redirect
+      - "traefik.http.routers.chat-backend-http.rule=Host(`api.cookbook.techtrove.ddns.net`)"
+      - "traefik.http.routers.chat-backend-http.entrypoints=web"
+      - "traefik.http.routers.chat-backend-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+networks:
+  shared-db:
+    external: true
+  shared-proxy:
+    external: true
