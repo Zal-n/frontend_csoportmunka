@@ -25,17 +25,16 @@ services:
       - "traefik.enable=true"
 
       # Router
-      - "traefik.http.routers.chat-backend.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
-      - "traefik.http.routers.chat-backend.entrypoints=websecure"
-      - "traefik.http.routers.chat-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.${DB_HOST}-backend.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
+      - "traefik.http.routers.${DB_HOST}-backend.entrypoints=websecure"
+      - "traefik.http.routers.${DB_HOST}-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.${DB_HOST}-backend.tls=true"
 
-      # Service port (this is CRITICAL)
-      - "traefik.http.services.chat-backend.loadbalancer.server.port=${PORT}"
+      - "traefik.http.services.${DB_HOST}-backend.loadbalancer.server.port=${PORT}"
 
-      # Optional: automatic HTTP->HTTPS redirect
-      - "traefik.http.routers.chat-backend-http.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
-      - "traefik.http.routers.chat-backend-http.entrypoints=web"
-      - "traefik.http.routers.chat-backend-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.${DB_HOST}-backend-http.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
+      - "traefik.http.routers.${DB_HOST}-backend-http.entrypoints=web"
+      - "traefik.http.routers.${DB_HOST}-backend-http.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
 networks:
