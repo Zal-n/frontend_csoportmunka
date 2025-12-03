@@ -25,17 +25,16 @@ services:
       - "traefik.enable=true"
 
       # Router
-      - "traefik.http.routers.chat-backend.rule=Host(`api.cookbook.techtrove.ddns.net`)"
-      - "traefik.http.routers.chat-backend.entrypoints=websecure"
-      - "traefik.http.routers.chat-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cookbook-backend.rule=Host(`api.cookbook.techtrove.ddns.net`)"
+      - "traefik.http.routers.cookbook-backend.entrypoints=websecure"
+      - "traefik.http.routers.cookbook-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cookbook-backend.tls=true"
 
-      # Service port (this is CRITICAL)
-      - "traefik.http.services.chat-backend.loadbalancer.server.port=3003"
+      - "traefik.http.services.cookbook-backend.loadbalancer.server.port=3003"
 
-      # Optional: automatic HTTP->HTTPS redirect
-      - "traefik.http.routers.chat-backend-http.rule=Host(`api.cookbook.techtrove.ddns.net`)"
-      - "traefik.http.routers.chat-backend-http.entrypoints=web"
-      - "traefik.http.routers.chat-backend-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.cookbook-backend-http.rule=Host(`api.cookbook.techtrove.ddns.net`)"
+      - "traefik.http.routers.cookbook-backend-http.entrypoints=web"
+      - "traefik.http.routers.cookbook-backend-http.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
 networks:
