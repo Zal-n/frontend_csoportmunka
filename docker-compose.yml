@@ -7,7 +7,7 @@ services:
     environment:
       PORT: ${PORT}
       DB_NAME: ${DB_HOST}
-      DB_HOST: techtrove.ddns.net
+      DB_HOST: ${DB_HOST}
       PASSWORD: ${DB_PASS}
       USER: ${DB_USER}
       NODE_ENV: ${NODE_ENV}
