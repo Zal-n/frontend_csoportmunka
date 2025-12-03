@@ -8,7 +8,7 @@ app.use(colorLog);
 app.use('/auth', authRouter);
 
 
-
+app.get('/healthcheck', (req,res)=>res.status(200).json('Ok'));
 app.use(errorLog);
 
 app.listen(PORT, ()=>{
