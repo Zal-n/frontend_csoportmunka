@@ -1,6 +1,6 @@
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /
 
 # Needed for healthcheck
 RUN apk add --no-cache curl
