@@ -1,0 +1,45 @@
+services:
+
+  ${DB_HOST}-backend:
+    build: ./backend
+    container_name: ${DB_HOST}-backend
+    restart: always
+    environment:
+      PORT: ${PORT}
+      DB_NAME: ${DB_HOST}
+      DB_HOST: techtrove.ddns.net
+      PASSWORD: ${DB_PASS}
+      USER: ${DB_USER}
+      NODE_ENV: ${NODE_ENV}
+      FRONTEND_URL: "*"
+    networks:
+      - shared-proxy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/healthcheck"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+
+    labels:
+      - "traefik.enable=true"
+
+      # Router
+      - "traefik.http.routers.chat-backend.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
+      - "traefik.http.routers.chat-backend.entrypoints=websecure"
+      - "traefik.http.routers.chat-backend.tls.certresolver=letsencrypt"
+
+      # Service port (this is CRITICAL)
+      - "traefik.http.services.chat-backend.loadbalancer.server.port=${PORT}"
+
+      # Optional: automatic HTTP->HTTPS redirect
+      - "traefik.http.routers.chat-backend-http.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
+      - "traefik.http.routers.chat-backend-http.entrypoints=web"
+      - "traefik.http.routers.chat-backend-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+
+networks:
+  shared-db:
+    external: true
+  shared-proxy:
+    external: true
