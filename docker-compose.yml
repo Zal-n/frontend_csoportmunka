@@ -6,6 +6,16 @@ services:
     restart: always
     networks:
       - shared-proxy
+    environment:
+      -PORT:${PORT}
+      -DB_NAME:${DB_NAME}
+      -DB_HOST:${DB_HOST}
+      -DB_PASS:{DB_PASS}
+      -DB_USER:${DB_USER}
+      -NODE_ENV:${NODE_ENV}
+      -FRONTEND_URL:${FRONTEND_URL}
+      -ACCESS_TOKEN_SECRET:${ACCESS_TOKEN_SECRET}
+      -REFRESH_TOKEN_SECRET:${REFRESH_TOKEN_SECRET}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:${PORT}/healthcheck"]
       interval: 10s
