@@ -4,16 +4,6 @@ services:
     build: ./backend
     container_name: ${DB_HOST}-backend
     restart: always
-    environment:
-      PORT: ${PORT}
-      DB_NAME: ${DB_HOST}
-      DB_HOST: ${DB_HOST}
-      PASSWORD: ${DB_PASS}
-      USER: ${DB_USER}
-      NODE_ENV: ${NODE_ENV}
-      FRONTEND_URL: "*"
-      ACCESS_TOKEN_SECRET: d4bb48963fddbea3a76a452cc086102123324d56cfe68d15
-      REFRESH_TOKEN_SECRET: 4b852529768b3460a194c341902388e942ea950008ecdb31
     networks:
       - shared-proxy
     healthcheck:
