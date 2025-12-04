@@ -9,11 +9,13 @@ const app = express();
 const PORT = config.PORT;
 const corsOptions = {
   origin: '*',
+  credentials: true,
 
 }
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 
 

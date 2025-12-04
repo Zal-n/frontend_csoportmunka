@@ -1,5 +1,6 @@
 import { pool } from "../config/mysql.js";
 import argon2 from 'argon2';
+import { config } from "../config/env.js";
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 import validate from "psgutil";
 
