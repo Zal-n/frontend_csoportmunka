@@ -10,7 +10,7 @@ export async function Register(req, res, next) {
   if (!validate('username', username)) return res.status(400).json({ message: 'Incorrect username!' });
   if (!validate('email', email)) return res.status(400).json({ message: 'Incorrect email address!' });
   if (!validate('password', password)) return res.status(400).json({ message: 'Incorrect password!' });
-  
+
   const conn = await pool.getConnection();
   try {
 
@@ -84,7 +84,7 @@ export async function Login(req, res, next) {
   }
 }
 
-export async function Refresh(req, res, next) {
+export function Refresh(req, res, next) {
   try {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) return res.status(401).json({ message: 'Refresh Token required.' });
@@ -111,5 +111,15 @@ export async function Refresh(req, res, next) {
 
   } catch (err) {
     next(err);
+  }
+}
+
+export function Logout(req, res, next) {
+  try {
+    req.clearCookie('accessToken');
+    req.clearCookie('refreshToken');
+    return res.status(200).json({ message: 'Logged out successfully!' });
+  } catch (error) {
+    next(error);
   }
 }
