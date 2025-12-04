@@ -3,12 +3,32 @@ import { pool } from '../config/mysql.js';
 export async function GetRecipesByCategory(req, res, next) {
   try {
     const category = req.params.category;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
 
-    const [result] = await pool.query('SELECT * FROM recipes WHERE category = ?;', [category]);
+    const [countResult] = await pool.query(
+      'SELECT COUNT(*) as total FROM recipes WHERE category = ?;',
+      [category]
+    );
+    const total = countResult[0].total;
+
+    const [result] = await pool.query(
+      'SELECT * FROM recipes WHERE category = ? LIMIT ? OFFSET ?;',
+      [category, limit, offset]
+    );
 
     if (result.length < 1) return res.status(404).json({ message: 'Category not found!' });
 
-    return res.status(200).json(mapResults(result));
+    return res.status(200).json({
+      data: mapResults(result, next),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
 
   } catch (error) {
     next(error);
@@ -23,7 +43,7 @@ export async function GetRecipesById(req, res, next) {
 
     if (result.length < 1) return res.status(404).json({ message: 'Recipe not found!' });
 
-    return res.status(200).json(mapResults(result));
+    return res.status(200).json(mapResults(result, next)[0]);
 
   } catch (error) {
     next(error);
@@ -33,13 +53,30 @@ export async function GetRecipesById(req, res, next) {
 export async function GetRecipesByName(req, res, next) {
   try {
     const name = req.params.name;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
 
-    const [result] = await pool.query('SELECT * FROM recipes WHERE name LIKE ?;', [`%${name}%`]);
+    const [countResult] = await pool.query(
+      'SELECT COUNT(*) as total FROM recipes WHERE name = ?;',
+      [`%${name}%`]
+    );
+    const total = countResult[0].total;
+
+    const [result] = await pool.query('SELECT * FROM recipes WHERE name LIKE ? LIMIT ? OFFSET ?;', [`%${name}%`, limit, offset]);
 
     if (result.length < 1) return res.status(404).json({ message: 'No recipe found!' });
 
 
-    return res.status(200).json(mapResults(result));
+    return res.status(200).json({
+      data: mapResults(result, next),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -50,6 +87,8 @@ export async function UploadRecipe(req, res, next) {
   try {
 
     const { name, description, ingredients, instructions, category } = req.body;
+
+    if (!validateRecipeName(name)) return res.status(400).json({ message: 'Incorrect recipe name!' });
 
     await conn.beginTransaction();
     await conn.query('INSERT INTO recipes (name, description, ingredients, instructions, uploader_id, category) VALUES (?, ?, ?, ?, ?, ?);', [name, description, JSON.stringify(ingredients), JSON.stringify(instructions), req.user.id, category]);
@@ -65,14 +104,25 @@ export async function UploadRecipe(req, res, next) {
   }
 }
 
-function mapResults(result) {
-  const resultObjects = result.map(row => ({
-    id: row.id,
-    name: row.name,
-    category: row.category,
-    description: row.description,
-    ingredients: JSON.parse(row.ingredients),
-    instructions: JSON.parse(row.instructions),
-  }));
-  return resultObjects;
+function mapResults(result, next) {
+  try {
+    const resultObjects = result.map(row => ({
+      id: row.id,
+      name: row.name,
+      category: row.category,
+      description: row.description,
+      ingredients: JSON.parse(row.ingredients),
+      instructions: JSON.parse(row.instructions),
+    }));
+    return resultObjects;
+  } catch (error) {
+    next(error);
+  }
+
+}
+
+function validateRecipeName(input) {
+  const regex = /^[\p{L}0-9' ]{1,40}$/u;
+
+  return regex.test(input);
 }
