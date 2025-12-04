@@ -1,4 +1,5 @@
 import { pool } from '../config/mysql.js';
+import { validateCategory, validateRecipeName } from '../utils/validation.js';
 
 export async function GetRecipesByCategory(req, res, next) {
   try {
@@ -89,6 +90,9 @@ export async function UploadRecipe(req, res, next) {
     const { name, description, ingredients, instructions, category } = req.body;
 
     if (!validateRecipeName(name)) return res.status(400).json({ message: 'Incorrect recipe name!' });
+    if (!Array.isArray(ingredients) || ingredients.length === 0) return res.status(400).json({ message: 'Ingredients must be a non-empty array!' });
+    if (!Array.isArray(instructions) || instructions.length === 0) return res.status(400).json({ message: 'Instructions must be a non-empty array!' });
+    if (!validateCategory(category)) return res.status(400).json({ message: 'Invalid category!' });
 
     await conn.beginTransaction();
     await conn.query('INSERT INTO recipes (name, description, ingredients, instructions, uploader_id, category) VALUES (?, ?, ?, ?, ?, ?);', [name, description, JSON.stringify(ingredients), JSON.stringify(instructions), req.user.id, category]);
@@ -121,8 +125,3 @@ function mapResults(result, next) {
 
 }
 
-function validateRecipeName(input) {
-  const regex = /^[\p{L}0-9' ]{1,40}$/u;
-
-  return regex.test(input);
-}
