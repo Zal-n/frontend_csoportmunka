@@ -4,27 +4,51 @@ import Home from "./pages/Home";
 import Fridge from "./pages/Fridge";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Account from "./pages/Account";
+import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
+  const [isloggedin, setIsLoggedIn] = useState(false);
 
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+
       <BrowserRouter>
         <nav>
-          <NavLink to="/">Receptek</NavLink>
-          <NavLink to="/fridge">Mi van a hűtődben?</NavLink>
-          <NavLink to="/account">Fiók</NavLink>
+          {isloggedin ?
+            <>
+              <NavLink to="/">Receptek</NavLink>
+              <NavLink to="/account">Fiók</NavLink>
+              <NavLink to="/fridge">Mi van a hűtődben?</NavLink>
+            </>
+            :
+            <>
+              <NavLink to="/">Receptek</NavLink>
+              <NavLink to="/account">Fiók</NavLink>
+            </>}
         </nav>
+
         <Routes>
-          <Route path='/' element={<Home />}/>
-          <Route path='/fridge' element={<Fridge/>}/>
-          <Route path='/account' element={<Login/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/login' element={<Login/>}/>
+          <Route path='/' element={<Home />} />
+          <Route path='/fridge' element={<Fridge />} />
+          <Route path='/account' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
         </Routes>
       </BrowserRouter>
-      
+
     </>
   )
 }

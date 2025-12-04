@@ -1,27 +1,33 @@
 import { useState, useEffect } from 'react';
 import {toast, ToastContainer} from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
+    let navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log(e.target.username.value)
-
-        const username = e.target.username.value;
+        const credential = e.target.credential.value;
         const password = e.target.password.value;
         const password_again = e.target.password_again.value;
-
-        const res = await fetch("", {
-            method: "POST",
-            headers: { "Conent-Type": "application/json" },
-            body: JSON.stringify({ "username": username, "password": password, "password_again": password_again })
-        })
         
-        if (res.ok) {
-            toast.success("Sikeres regisztráció!");
+        if(password != password_again){
+            toast.error("A jelszavak nem egyeznek!")
         }
-        else {
-            toast.error("Sikertelen regisztráció!");
+        else{
+            const res = await fetch("https://api.cookbook.techtrove.ddns.net/auth/register", {
+                method: "POST",
+                headers: { "Conent-Type": "application/json" },
+                body: JSON.stringify({ "credential": credential, "password": password })
+            })
+
+            if (res.ok) {
+                toast.success("Sikeres regisztráció!");
+                navigate("/login")
+            }
+            else {
+                toast.error("Sikertelen regisztráció!");
+            }
         }
     }
 
@@ -29,26 +35,11 @@ function Register() {
         <>
             <h1>Register</h1>
             <form onSubmit={handleSubmit}>
-                <input name='username' type="text" placeholder='Felhasználónév' required />
+                <input name='credential' type="text" placeholder='E-mail cím / Felhasználónév' required />
                 <input name='password' type="password" placeholder='Jelszó' required />
                 <input name='password_again' type="password" placeholder='Jelszó ismét' required />
                 <button type='submit'>Regisztráció</button>
             </form>
-
-            <ToastContainer
-                position="bottom-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-
-
         </>
     )
 }

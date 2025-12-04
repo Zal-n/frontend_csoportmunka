@@ -1,17 +1,18 @@
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-function Login(){
+function Login({setIsLoggedIn}){
     let navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
-        console.log(e.target.username.value)
-
+        
         const username = e.target.username.value;
         const password = e.target.password.value;
+        console.log(username)
+        console.log(password)
 
-        const res = await fetch("http://localhost:3003/login", {
+        const res = await fetch("https://api.cookbook.techtrove.ddns.net/auth/login", {
             method: "POST",
             headers: { "Conent-Type": "application/json" },
             body: JSON.stringify({ "username": username, "password": password})
@@ -19,6 +20,7 @@ function Login(){
         
         if (res.ok) {
             toast.success("Sikeres bejelentkezés!");
+            setIsLoggedIn(true);
         }
         else {
             toast.error("Sikertelen bejelentkezés!");
@@ -34,19 +36,6 @@ function Login(){
                 <input name='password' type="password" placeholder='Jelszó' required />
                 <button type='submit'>Bejelentkezés</button>
         </form>
-
-        <ToastContainer
-                position="bottom-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-        />
 
         <h3>Még nem regisztráltál?</h3>
         
