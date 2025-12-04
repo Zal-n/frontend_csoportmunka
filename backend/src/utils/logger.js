@@ -22,9 +22,8 @@ function colorLog(req, res, next) {
     const duration = Date.now() - start;
     if (req.originalUrl != '/healthcheck') {
       const timestamp = new Date().toLocaleString('hu-HU').replace(',', '');
-      console.log(`${gray}${timestamp}${reset} - ${blue}${req.method}${reset} ${cyan}${req.originalUrl}${reset} - ${statusColor(req.status)}${res.statusCode}${reset} from ${yellow}${req.headers['x-forwarded-for']}${reset} ${gray}(${duration}ms)${reset}`);
+      console.log(`${gray}${timestamp}${reset} - ${blue}${req.method}${reset} ${cyan}${req.originalUrl}${reset} - ${statusColor(req.status)}${res.statusCode}${reset} from ${yellow}${config.NODE_ENV === 'production' ? req.headers['x-forwarded-for'] : req.ip}${reset} ${gray}(${duration}ms)${reset}`);
     }
-    console.log(req.body);
   });
   next();
 };
@@ -41,7 +40,7 @@ function errorLog(error, req, res, next) {
   const statusCode = error.statusCode || 500;
   return res.status(statusCode).json({
     error: error.message || 'Internal Server Error',
-    ...(config.NODE_ENV === 'dev' && {stack: error.stack}),
+    ...(config.NODE_ENV === 'dev' && { stack: error.stack }),
   })
 };
 
