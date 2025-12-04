@@ -6,6 +6,10 @@ import { config } from './config/env.js';
 const app = express();
 const PORT = config.PORT;
 
+app.use(cors({
+    origin: '*',
+}))
+
 
 app.use(colorLog);
 
