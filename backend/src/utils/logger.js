@@ -24,6 +24,7 @@ function colorLog(req, res, next) {
       const timestamp = new Date().toLocaleString('hu-HU').replace(',', '');
       console.log(`${gray}${timestamp}${reset} - ${blue}${req.method}${reset} ${cyan}${req.originalUrl}${reset} - ${statusColor(req.status)}${res.statusCode}${reset} from ${yellow}${req.headers['x-forwarded-for']}${reset} ${gray}(${duration}ms)${reset}`);
     }
+    console.log(req.body);
   });
   next();
 };
