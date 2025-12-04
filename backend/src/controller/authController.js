@@ -5,28 +5,26 @@ import { usernameRegex, passwordRegex, emailRegex } from "psgutil/src/regex.js";
 
 
 export async function Register(req, res, next) {
-  const {username, email, password} = req.body;
+  const { username, email, password } = req.body;
   try {
 
-    
-
-    return res.status(200).json({ message: 'Sikeres regisztráció'});
+    return res.status(200).json({ message: 'Sikeres regisztráció' });
 
   } catch (error) {
     next(error);
   }
 }
 export async function Login(req, res, next) {
-  const {credential, password} = req.body;
+  const { credential, password } = req.body;
   try {
 
     const [result] = await pool.query('SELECT username, email, password, rights FROM users WHERE username = ? OR email = ?;', [credential, credential]);
 
-    if(result.length == 0) return res.status(400).json({message: 'Helytelen felhasználó vagy jelszó!'});
+    if (result.length == 0) return res.status(400).json({ message: 'Helytelen felhasználó vagy jelszó!' });
 
     const user = result[0];
 
-    if(!argon2.verify(user.password, password)) return res.status(400).json({message: 'Helytelen felhasználó vagy jelszó!'});
+    if (!argon2.verify(user.password, password)) return res.status(400).json({ message: 'Helytelen felhasználó vagy jelszó!' });
 
     const payload = {
       username: user.username,
@@ -58,7 +56,7 @@ export async function Login(req, res, next) {
     });
 
 
-    return res.status(200).json({ message: 'Sikeres bejelentkezés', username: user.username, email: user.email});
+    return res.status(200).json({ message: 'Sikeres bejelentkezés', username: user.username, email: user.email });
 
   } catch (error) {
     next(error);
