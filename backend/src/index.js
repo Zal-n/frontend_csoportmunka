@@ -1,11 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
 
 import { errorLog, colorLog } from './utils/logger.js';
 import { config } from './config/env.js';
+import { swaggerSpec } from './config/swagger.js';
 import authRouter from './routes/authRoutes.js';
 import contentRouter from './routes/contentRoutes.js';
+
 
 
 const app = express();
@@ -26,6 +29,10 @@ app.use(colorLog);
 
 app.use('/auth', authRouter);
 app.use('/content', contentRouter);
+
+if(config.NODE_ENV === '${NODE_ENV}'){
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+}
 
 
 app.get('/healthcheck', (req, res) => res.status(200).json('Ok'));
