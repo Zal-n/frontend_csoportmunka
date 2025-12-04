@@ -39,7 +39,6 @@ const options = {
           properties: {
             id: { type: 'integer' },
             name: { type: 'string' },
-            description: { type: 'string' },
           },
         },
         Error: {
