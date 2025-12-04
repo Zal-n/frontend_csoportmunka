@@ -24,7 +24,7 @@ export async function Login(req, res, next) {
     if(!argon2.verify(user.password, password)) return res.status(400).json({message: 'Helytelen felhasználó vagy jelszó!'});
 
     const payload = {
-      username: username,
+      username: user.username,
       id: user.id,
       rights: user.rights,
     }
@@ -40,6 +40,13 @@ export async function Login(req, res, next) {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
+      secure: config.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.cookie('user', JSON.stringify(payload), {
+      httpOnly: false,
       secure: config.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000,
