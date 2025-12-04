@@ -1,9 +1,12 @@
 import express from 'express';
-import { errorLog, colorLog } from './utils/logger.js';
-import authRouter from './route/authRoutes.js';
-import { config } from './config/env.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+
+import { errorLog, colorLog } from './utils/logger.js';
+import { config } from './config/env.js';
+import authRouter from './routes/authRoutes.js';
+import contentRouter from './routes/contentRoutes.js';
+
 
 const app = express();
 const PORT = config.PORT;
