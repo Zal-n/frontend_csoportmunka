@@ -40,10 +40,11 @@ export async function Login(req, res, next) {
   const { credential, password } = req.body;
   try {
 
-    const [result] = await pool.query('SELECT username, email, password, rights FROM users WHERE username = ? OR email = ?;', [credential, credential]);
+    const [result] = await pool.query('SELECT id, username, email, password, rights FROM users WHERE username = ? OR email = ?;', [credential, credential]);
 
     if (result.length == 0) return res.status(400).json({ message: 'Helytelen felhasználó vagy jelszó!' });
 
+    console.log(result)
     const user = result[0];
 
     if (!argon2.verify(user.password, password)) return res.status(400).json({ message: 'Helytelen felhasználó vagy jelszó!' });
@@ -117,8 +118,8 @@ export function Refresh(req, res, next) {
 
 export function Logout(req, res, next) {
   try {
-    req.clearCookie('accessToken');
-    req.clearCookie('refreshToken');
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
     return res.status(200).json({ message: 'Logged out successfully!' });
   } catch (error) {
     next(error);
