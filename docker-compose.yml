@@ -6,6 +6,7 @@ services:
     restart: always
     networks:
       - shared-proxy
+      - shared-db
     environment:
       PORT: ${PORT}
       DB_NAME: ${DB_NAME}
