@@ -6,21 +6,32 @@ import validate from "psgutil";
 
 export async function Register(req, res, next) {
   const { username, email, password } = req.body;
+
+  if (!validate('username', username)) return res.status(400).json({ message: 'Incorrect username!' });
+  if (!validate('email', email)) return res.status(400).json({ message: 'Incorrect email address!' });
+  if (!validate('password', password)) return res.status(400).json({ message: 'Incorrect password!' });
+  
+  const conn = await pool.getConnection();
   try {
 
-    if(!validate('username', username)) return res.status(400).json({message: 'Incorrect username!'});
-    if(!validate('email', email)) return res.status(400).json({message: 'Incorrect email addres!'});
-    if(!validate('password', password)) return res.status(400).json({message: 'Incorrect password!'});
+    await conn.beginTransaction();
 
-    const [userResult] = await pool.query('SELECT id FROM users WHERE username = ? OR email = ?;', [username, email]);
-    if(userResult.length > 0) return res.status(409).json({message: 'User with this username or email address already exists!'});
+    const [userResult] = await conn.query('SELECT id FROM users WHERE username = ? OR email = ?;', [username, email]);
+    if (userResult.length > 0) {
+      conn.release();
+      return res.status(409).json({ message: 'User with this username or email address already exists!' });
+    }
 
-    await pool.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?);', [username, email, await argon2.hash(password)]);
+    await conn.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?);', [username, email, await argon2.hash(password)]);
 
-    return res.status(200).json({ message: 'Sikeres regisztráció' });
+    await conn.commit();
+    return res.status(201).json({ message: 'Successful registration.' });
 
   } catch (error) {
+    await conn.rollback();
     next(error);
+  } finally {
+    conn.release();
   }
 }
 export async function Login(req, res, next) {
