@@ -1,3 +1,7 @@
+import { pool } from "../config/mysql";
+import argon2 from 'argon2';
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+
 
 export async function Register(req, res, next) {
   try {
@@ -7,15 +11,42 @@ export async function Register(req, res, next) {
     next(error);
   }
 }
-export function Login(req, res, next) {
-  const {username, password} = req.body;
+export async function Login(req, res, next) {
+  const {credential, password} = req.body;
   try {
-    
+
+    const [result] = await pool.query('SELECT username, email, password, rights FROM users WHERE username = ? OR email = ?;', [credential, credential]);
+
+    if(result.length == 0) return res.status(400).json({message: 'Helytelen felhasználó vagy jelszó!'});
+
+    const user = result[0];
+
+    if(!argon2.verify(user.password, password)) return res.status(400).json({message: 'Helytelen felhasználó vagy jelszó!'});
+
+    const payload = {
+      username: username,
+      id: user.id,
+      rights: user.rights,
+    }
+    const accessToken = generateAccessToken(payload);
+    const refreshToken = generateRefreshToken(payload);
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: config.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: config.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
 
-
-
-    return res.status(200).json({ message: 'Sikeres bejelentkezés', username: 'admin', email: 'test@test.com'});
+    return res.status(200).json({ message: 'Sikeres bejelentkezés', username: user.username, email: user.email});
 
   } catch (error) {
     next(error);
