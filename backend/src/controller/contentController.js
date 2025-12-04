@@ -108,6 +108,16 @@ export async function UploadRecipe(req, res, next) {
   }
 }
 
+export async function GetCategories(req, res, next) {
+  try {
+    const [result] = await pool.query('SELECT * FROM categories ORDER BY name;');
+
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
 function mapResults(result, next) {
   try {
     const resultObjects = result.map(row => ({
