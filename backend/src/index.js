@@ -34,6 +34,7 @@ if(config.NODE_ENV === '${NODE_ENV}'){
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
 
+console.log(config);
 
 app.get('/healthcheck', (req, res) => res.status(200).json('Ok'));
 
