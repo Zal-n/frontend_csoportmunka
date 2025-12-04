@@ -25,6 +25,7 @@ app.use(cookieParser());
 app.use(colorLog);
 
 app.use('/auth', authRouter);
+app.use('/content', contentRouter);
 
 
 app.get('/healthcheck', (req, res) => res.status(200).json('Ok'));
