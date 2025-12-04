@@ -6,7 +6,7 @@ export const config = {
     PORT : process.env.PORT,
     DB_HOST : process.env.DB_HOST,
     DB_NAME : process.env.DB_NAME,
-    DB_PASS : process.env.PASSWORD,
+    DB_PASS : process.env.DB_PASS,
     DB_USER : process.env.DB_USER,
     NODE_ENV : process.env.NODE_ENV,
     ACCESS_TOKEN_SECRET : process.env.ACCESS_TOKEN_SECRET,
