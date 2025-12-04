@@ -1,10 +1,15 @@
-import { pool } from "../config/mysql";
+import { pool } from "../config/mysql.js";
 import argon2 from 'argon2';
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import { usernameRegex, passwordRegex, emailRegex } from "psgutil/src/regex.js";
 
 
 export async function Register(req, res, next) {
+  const {username, email, password} = req.body;
   try {
+
+    
+
     return res.status(200).json({ message: 'Sikeres regisztráció'});
 
   } catch (error) {
