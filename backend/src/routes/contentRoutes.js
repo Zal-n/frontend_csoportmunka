@@ -8,7 +8,7 @@ const contentRouter = Router();
 contentRouter.get('/category/:category', GetRecipesByCategory);
 contentRouter.get('/id/:id', GetRecipesById);
 contentRouter.get('/name/:name', GetRecipesByName);
-contentRouter.post('/upload', validateFieldCount(4), validateRequiredFields(['name', 'ingredients', 'description', 'instructions']), authenticateToken, UploadRecipe);
+contentRouter.post('/upload', validateFieldCount(5), validateRequiredFields(['name', 'ingredients', 'category', 'description', 'instructions']), authenticateToken, UploadRecipe);
 
 
 export default contentRouter;
