@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser';
 const app = express();
 const PORT = config.PORT;
 const corsOptions = {
-    origin: '*',
+  origin: '*',
 
 }
 
@@ -27,5 +27,5 @@ app.get('/healthcheck', (req, res) => res.status(200).json('Ok'));
 app.use(errorLog);
 
 app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`)
+  console.log(`Server running on ${PORT}`)
 })
