@@ -1,6 +1,6 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import { Login, Refresh, Register } from '../controller/authController.js';
-import {validateFieldCount, validateRequiredFields} from 'psgutil';
+import { validateFieldCount, validateRequiredFields } from 'psgutil';
 
 const authRouter = Router();
 
