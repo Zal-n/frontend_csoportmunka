@@ -1,12 +1,20 @@
 import { pool } from "../config/mysql.js";
 import argon2 from 'argon2';
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
-import { usernameRegex, passwordRegex, emailRegex } from "psgutil/src/regex.js";
+import validate from "psgutil";
 
 
 export async function Register(req, res, next) {
   const { username, email, password } = req.body;
   try {
+
+    if(!validate('username', username)) return res.status(400).json({message: 'Incorrect username!'});
+    if(!validate('email', email)) return res.status(400).json({message: 'Incorrect email addres!'});
+    if(!validate('password', password)) return res.status(400).json({message: 'Incorrect password!'});
+
+    const [userResult] = await pool.query('SELECT id FROM users WHERE username = ? OR email = ?;', [username, email]);
+    if(userResult.length > 0) return res.status(409).json({message: 'User with this username or email address already exists!'});
+
 
     return res.status(200).json({ message: 'Sikeres regisztráció' });
 
