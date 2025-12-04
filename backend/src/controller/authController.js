@@ -15,6 +15,7 @@ export async function Register(req, res, next) {
     const [userResult] = await pool.query('SELECT id FROM users WHERE username = ? OR email = ?;', [username, email]);
     if(userResult.length > 0) return res.status(409).json({message: 'User with this username or email address already exists!'});
 
+    await pool.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?);', [username, email, await argon2.hash(password)]);
 
     return res.status(200).json({ message: 'Sikeres regisztráció' });
 
