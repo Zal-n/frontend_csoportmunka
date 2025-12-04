@@ -9,13 +9,15 @@ function Login({ setIsLoggedIn }) {
         e.preventDefault();
         const credential = e.target.credential.value;
         const password = e.target.password.value;
+        console.log(credential, password)
+        console.log(JSON.stringify({ credential: credential, password: password }))
 
         try {
             // FIX: Content-Type javítva
             const res = await fetch("https://api.cookbook.techtrove.ddns.net/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "credential": credential, "password": password })
+                body: JSON.stringify({ credential: credential, password: password })
             });
 
             if (res.ok) {
