@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Form, Button, FloatingLabel } from 'react-bootstrap';
+import { fetchWithAuth } from "../util/auth.js";
+import { API_BASE_URL, API_ENDPOINTS } from "../util/api";
 
 function Login({ setIsLoggedIn }) {
     let navigate = useNavigate();
@@ -13,12 +15,9 @@ function Login({ setIsLoggedIn }) {
         console.log(JSON.stringify({ credential: credential, password: password }))
 
         try {
-            // FIX: Content-Type javítva
-            const res = await fetch("https://api.cookbook.techtrove.ddns.net/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ credential: credential, password: password })
-            });
+            const res = await fetchWithAuth(`${API_BASE_URL}${API_ENDPOINTS.LOGIN}`,{
+                body: JSON.stringify({ credential: credential, password: password }),
+            })
 
             if (res.ok) {
                 toast.success("Sikeres bejelentkezés! 🍲");

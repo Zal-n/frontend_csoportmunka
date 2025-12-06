@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Form, Button, FloatingLabel } from 'react-bootstrap';
+import { API_BASE_URL, API_ENDPOINTS } from "../util/api";
 
 function Register() {
     let navigate = useNavigate();
@@ -18,11 +19,8 @@ function Register() {
         }
 
         try {
-            // FIX: Content-Type javítva
-            const res = await fetch("https://api.cookbook.techtrove.ddns.net/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "username": username, "email": email, "password": password })
+            const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS}`, {
+                body: JSON.stringify({ "username": username, "email": email, "password": password }),
             });
 
             if (res.ok) {
