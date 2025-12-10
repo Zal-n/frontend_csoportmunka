@@ -11,10 +11,8 @@ RUN npm ci --omit=dev
 FROM node:20-alpine AS runtime
 WORKDIR /usr/src/app
 
-# Add curl for healthchecks
 RUN apk add --no-cache curl
 
-# Set safe production environment
 ENV NODE_ENV=production
 
 # Create non-root user
@@ -23,10 +21,7 @@ RUN addgroup -S nodegroup && adduser -S nodeuser -G nodegroup
 # Copy dependencies
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 
-# Copy package files for metadata
-COPY package*.json ./
-
-# Copy source code
+# Copy app source
 COPY . .
 
 USER nodeuser
@@ -34,6 +29,6 @@ USER nodeuser
 EXPOSE 3003
 
 HEALTHCHECK --interval=10s --timeout=3s --start-period=20s --retries=5 \
-    CMD curl -sS http://localhost:3000/healthcheck || exit 1
+    CMD curl -sS http://localhost:3003/healthcheck || exit 1
 
 CMD ["node", "."]
