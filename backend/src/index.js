@@ -14,7 +14,7 @@ import contentRouter from './routes/contentRoutes.js';
 const app = express();
 const PORT = config.PORT;
 const corsOptions = {
-  origin: "http://localhost:5173"
+  origin: "http://localhost:5173",
   credentials: true,
 
 }
