@@ -28,17 +28,17 @@ services:
       - "traefik.enable=true"
 
       # Router
-      - "traefik.http.routers.${DB_HOST}-backend.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
-      - "traefik.http.routers.${DB_HOST}-backend.entrypoints=websecure"
+      - "traefik.http.routers.cookbook-backend.rule=Host(`api.cookbook.techtrove.ddns.net`)"
+      - "traefik.http.routers.cookbook-backend.entrypoints=websecure"
       - "traefik.docker.network=shared-proxy"
-      - "traefik.http.routers.${DB_HOST}-backend.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.${DB_HOST}-backend.tls=true"
+      - "traefik.http.routers.cookbook-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.cookbook-backend.tls=true"
 
       - "traefik.http.services.${DB_HOST}-backend.loadbalancer.server.port=${PORT}"
 
-      - "traefik.http.routers.${DB_HOST}-backend-http.rule=Host(`api.${DB_HOST}.techtrove.ddns.net`)"
-      - "traefik.http.routers.${DB_HOST}-backend-http.entrypoints=web"
-      - "traefik.http.routers.${DB_HOST}-backend-http.middlewares=redirect-to-https"
+      - "traefik.http.routers.cookbook-backend-http.rule=Host(`api.cookbook.techtrove.ddns.net`)"
+      - "traefik.http.routers.cookbook-backend-http.entrypoints=web"
+      - "traefik.http.routers.cookbook-backend-http.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
 networks:
