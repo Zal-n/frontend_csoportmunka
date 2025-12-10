@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import Fridge from "./pages/Fridge";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Upload_recipes from './pages/Upload_recipes';
 
 function App() {
   const [isloggedin, setIsLoggedIn] = useState(false);
@@ -50,6 +51,9 @@ function App() {
                     <Nav.Link as={NavLink} to="/fridge" className="nav-link-custom">
                       Hűtőm tartalma
                     </Nav.Link>
+                    <Nav.Link as={NavLink} to="/upload" className="nav-link-custom">
+                      Recept feltöltés
+                    </Nav.Link>
                     <Nav.Link as={NavLink} to="/account" className="nav-link-custom">
                       Fiókom
                     </Nav.Link>
@@ -74,10 +78,11 @@ function App() {
             <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/fridge' element={<Fridge />} />
-            {/* Mindkét helyre átadjuk a setIsLoggedIn-t */}
+
             <Route path='/account' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/upload' element={<Upload_recipes />} />
             </Routes>
         </Container>
       </BrowserRouter>

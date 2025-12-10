@@ -15,7 +15,11 @@ function Login({ setIsLoggedIn }) {
         console.log(JSON.stringify({ credential: credential, password: password }))
 
         try {
-            const res = await fetchWithAuth(`${API_BASE_URL}${API_ENDPOINTS.LOGIN}`,{
+            const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.LOGIN}`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({ credential: credential, password: password }),
             })
 
