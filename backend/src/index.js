@@ -30,7 +30,7 @@ app.use(colorLog);
 app.use('/auth', authRouter);
 app.use('/content', contentRouter);
 
-if(config.NODE_ENV === '${NODE_ENV}'){
+if(config.NODE_ENV === 'dev'){
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 }
 
