@@ -7,7 +7,7 @@ export async function fetchWithAuth(url, options = {}) {
     try {
         let res = await fetchWithCredentials(url, options);
 
-        if (res.status(401)) {
+        if (res.status == 401) {
             const refreshed = await refreshToken();
 
             if (refreshed) {
