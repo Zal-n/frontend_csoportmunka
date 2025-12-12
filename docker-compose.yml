@@ -3,7 +3,7 @@ services:
   cookbook-backend:
     build: ./backend
     container_name: cookbook-backend
-    restart: always
+    restart: unless-stopped
     networks:
       - shared-proxy
       - shared-db
