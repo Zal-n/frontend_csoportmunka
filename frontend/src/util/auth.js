@@ -11,6 +11,7 @@ export async function fetchWithAuth(url, options = {}) {
             const refreshed = await refreshToken();
 
             if (refreshed) {
+                // Ha sikerült frissíteni, újrapróbáljuk az eredeti kérést
                 res = await fetchWithCredentials(url, options);
             } else {
                 const protectedRoutes = ['/fridge'];
@@ -21,13 +22,16 @@ export async function fetchWithAuth(url, options = {}) {
                 }
             }
         }
+
+        // --- EZ HIÁNYZOTT: ---
+        return res; 
+        // ---------------------
+
     } catch (error) {
         console.error('Network error: ', error);
         throw error;
     }
 }
-
-
 
 export async function refreshToken() {
     if (isRefreshing) {
@@ -35,6 +39,9 @@ export async function refreshToken() {
     }
 
     isRefreshing = true;
+    
+    // Javítás: Azonnal meghívjuk a függvényt a () jellel a végén, 
+    // hogy Promise-t kapjunk, ne egy függvény definíciót.
     refreshPromise = (async () => {
         try {
             const res = await fetch(`${API_BASE_URL}${API_ENDPOINTS.REFRESH}`, {
@@ -49,7 +56,9 @@ export async function refreshToken() {
             isRefreshing = false;
             refreshPromise = null;
         }
-    })
+    })(); // <--- Itt a () a végén fontos!
+
+    return refreshPromise;
 }
 
 function fetchWithCredentials(url, options = {}) {
@@ -61,4 +70,10 @@ function fetchWithCredentials(url, options = {}) {
             'Content-Type': 'application/json',
         }
     });
+}
+
+export function logout(){
+    return fetchWithAuth(`${API_BASE_URL}${API_ENDPOINTS.LOGOUT}`, {
+        method: 'POST'
+    })
 }

@@ -85,3 +85,93 @@ body {
     transform: translateY(0);
   }
 }
+
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Home oldal specifikus design */
+
+.home-hero {
+  background: linear-gradient(135deg, #ff9f43, #ff6b6b);
+  border-radius: 0 0 40px 40px;
+}
+
+.section-title {
+  color: #333;
+  border-left: 5px solid #ff6b6b;
+  padding-left: 15px;
+}
+
+.badge-custom {
+  color: #ff6b6b !important;
+  border:#ff6b6b solid 1px;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 500;
+}
+
+/* Kártya kép helyőrző */
+.recipe-img-box {
+  height: 180px;
+  background-color: #fffaf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.recipe-main-emoji {
+  font-size: 4rem;
+}
+
+.recipe-cat-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+  background-color: white !important;
+  color: #ff6b6b !important;
+  border: 1px solid #ff6b6b;
+  font-weight: 600;
+}
+
+.recipe-hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recipe-hover-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(255, 107, 107, 0.15) !important;
+}
+
+/* Lapozó színei a kék helyett korall */
+.custom-pagination .page-link {
+  border: none !important;
+  color: #555;
+  border-radius: 50% !important;
+  margin: 0 3px;
+}
+
+.custom-pagination .page-item.active .page-link {
+  background: linear-gradient(135deg, #ff9f43, #ff6b6b) !important;
+  color: white !important;
+}
+
+.custom-pagination .page-link:hover {
+  background-color: #fff5eb;
+  color: #ff6b6b;
+}
+
+.text-truncate-3 {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 4.5em;
+}

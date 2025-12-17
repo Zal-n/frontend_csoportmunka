@@ -20,12 +20,14 @@ function Login({ setIsLoggedIn }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: "include",
                 body: JSON.stringify({ credential: credential, password: password }),
             })
 
             if (res.ok) {
                 toast.success("Sikeres bejelentkezés! 🍲");
                 if (setIsLoggedIn) setIsLoggedIn(true);
+                localStorage.setItem('isLoggedIn', true);
                 navigate("/");
             } else {
                 toast.error("Hibás adatok!");

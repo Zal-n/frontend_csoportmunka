@@ -21,6 +21,7 @@ export const API_ENDPOINTS = {
         const query = new URLSearchParams(queryParams).toString();
         return `/content/id/${name}${query ? '?' + query : ''}`;
     },
+    GET_RECIPES: '/content/get_recipes',
     POST_RECIPE: '/content/upload',
 
 }
