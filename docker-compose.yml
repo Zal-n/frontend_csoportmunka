@@ -1,8 +1,8 @@
 services:
 
-  cookbook-backend:
+  backend:
     build: ./backend
-    container_name: cookbook-backend
+    container_name: backend
     restart: unless-stopped
     networks:
       - shared-proxy
