@@ -13,8 +13,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Upload_recipes from './pages/Upload_recipes';
 import { fetchWithAuth, logout } from './util/auth';
+import SpecificRecipe from './pages/SpecificRecipe';
 
 function App() {
+  const [recipeId, setRecipeId] = useState('');
   const [isloggedin, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('isLoggedIn') ? true : false;
 
@@ -76,10 +78,11 @@ function App() {
         {/* Oldal tartalma */}
         <Container className="mt-4">
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Home setRecipeId={setRecipeId}/>} />
             <Route path='/login' element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route path='/register' element={<Register />} />
             <Route path='/upload' element={<Upload_recipes />} />
+            <Route path='/specific_recipe' element={<SpecificRecipe recipeId={recipeId}/>} />
           </Routes>
         </Container>
       </BrowserRouter>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Button, Badge, Pagination } from 'react-bootstrap';
 import { API_BASE_URL, API_ENDPOINTS } from "../util/api";
 
-function Home() {
+function Home({setRecipeId}) {
     const [recipes, setRecipes] = useState([]);
     const [pagination, setPagination] = useState({ totalPages: 1, total: 0 });
     const [page, setPage] = useState(1);
@@ -95,7 +95,7 @@ function Home() {
                                         <Card.Footer className="bg-transparent border-0 p-4 pt-0">
                                             <Button 
                                                 className="custom-btn w-100 rounded-pill py-2"
-                                                onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                                onClick={() => {navigate(`/recipe/${recipe.id}`); setRecipeId(recipe.id)}}
                                             >
                                                 Megnézem
                                             </Button>
